@@ -13,17 +13,16 @@ import java.util.regex.Pattern;
 public class MyRegex {
 
     //For phone numbers
-    private static String phoneString = "" +
+    public static String phoneRegex = "" +
                     "(" +                //begin area code group
                     "\\(\\d{3}\\)\\s" +  //first area code pattern ex. "(123) "
                     "|" +                //OR
                     "\\d{3}-" +          //second area code pattern ex "123-"
                     ")?" +               //end area code group, make whole group optional
                     "\\d{3}-\\d{4}";     //rest of phone number ex. "123-4567"
-    public static Pattern phonePattern = Pattern.compile(phoneString);
 
     //For email
-    private static String emailString = "" +
+    public static String emailRegex = "" +
             "[" +      //BEGIN custom character class
             "a-z" +    //any lowercase letter
             "A-Z" +    //any uppercase letter
@@ -32,10 +31,9 @@ public class MyRegex {
             "]+" +     //END character class, previous class can occur 1-infinite times
             "@" +      //just an @ symbol
             "[a-zA-Z0-9_.-]+"; //same character class as before @, 1-infinite times
-    public static Pattern emailPattern = Pattern.compile(emailString);
 
     //For prices
-    private static String priceString = "" +
+    public static String priceRegex = "" +
             "\\$" +        //dollar Sign
             "(" +          //start leading numbers group
             "\\d{1,3}" +   //between 1 and 3 digits,
@@ -43,6 +41,17 @@ public class MyRegex {
             ")+" +         //end group, can occur 1-infinite times
             "\\." +        //decimal
             "\\d{2}";      //2 digits (cents)
-    public static Pattern pricePattern = Pattern.compile(priceString);
 
+    public String regexBuilder() {
+        System.out.println("A pattern is made of a combination of special characters and/or normal characters.");
+        System.out.println("For example, \"# digit digit space letter\" would match a 5 character string: " +
+                "A \"#\" sign followed by 2 numbers, a space, and then a letter. ex: \"#42 A\"");
+        System.out.println("Using the follow key, enter a pattern separated by spaces you would like to search for.");
+        System.out.println("""
+                digit = any number 0-9
+                letter = any letter a-z, case insensitive 
+                space = empty space
+                """);
+        
+    }
 }

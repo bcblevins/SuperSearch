@@ -1,3 +1,8 @@
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class IOSystem {
@@ -36,5 +41,26 @@ public class IOSystem {
     public static String promptForInput(String prompt) {
         System.out.println(prompt);
         return userInput.nextLine();
+    }
+
+    public static String getTextFromClipboard() {
+        String clipboardText = "";
+        try {
+            clipboardText = (String) Toolkit.getDefaultToolkit() //tool that helps with getting/changing things from the system
+                    .getSystemClipboard()                        //gives access to system clipboard
+                    .getData(DataFlavor.stringFlavor);           //gets text from the clipboard, makes it plain text
+        } catch (Exception e) {
+            System.err.println("Clipboard error");
+        }
+        return clipboardText;
+    }
+
+    public static void toScreenAndFile(File targetFile, String resultString) {
+        try (PrintWriter dataOutput = new PrintWriter(targetFile)) {
+            dataOutput.print(resultString);
+        } catch (FileNotFoundException e) {
+            System.out.println("There was an error writing to the output file. Please check filepath and try again.");
+        }
+        System.out.println(resultString);
     }
 }
