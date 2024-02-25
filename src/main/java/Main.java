@@ -45,7 +45,10 @@ public class Main {
                 IOSystem.toScreenAndFile(targetFile, simpleSearch.searchFromClipboard(searchTerm));
             }
         } else if (menuChoice.equals("5")) {
+            if (!isSearchingFromFile) {
+                IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.regexBuilder()));
 
+            }
         }
         // do the thing
     }
