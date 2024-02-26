@@ -34,10 +34,10 @@ public class RegexSearch extends Search{
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
-        if (isSorted && searchTerm.equals(searchTerm)) {
+        if (isSorted && searchTerm.equals(MyRegex.priceRegex)) {
+            resultString = String.join("", sortResultPrices(resultStringList));
+        } else if (isSorted) {
             resultString = String.join("", sortResultAlphabetical(resultStringList));
-        } else if (isSorted) {                        //TODO: add price/phone number sorting
-
         }else {
             resultString = String.join("", resultStringList);
         }
@@ -55,9 +55,11 @@ public class RegexSearch extends Search{
             resultStringList.add(matcher.group() + "\n");
         }
 
-        if (isSorted) {
+        if (isSorted && searchTerm.equals(MyRegex.priceRegex)) {
+            resultString = String.join("", sortResultPrices(resultStringList));
+        } else if (isSorted) {
             resultString = String.join("", sortResultAlphabetical(resultStringList));
-        } else {
+        }else {
             resultString = String.join("", resultStringList);
         }
 
@@ -78,6 +80,24 @@ public class RegexSearch extends Search{
                 if (currentIndex.compareTo(nextIndex) > 0) {
                     resultStringList.set(i, nextIndex);
                     resultStringList.set(i + 1, currentIndex);
+                }
+            }
+            stopAtOneFewerEachLoop--;
+        }
+        return resultStringList;
+    }
+
+    public List<String> sortResultPrices(List<String> resultStringList) {
+        int stopAtOneFewerEachLoop = resultStringList.size();
+
+        for (int iSuper = 0; iSuper < resultStringList.size(); iSuper++) {
+            for (int i = 0; i < stopAtOneFewerEachLoop-1; i++) {
+                String currentIndex = resultStringList.get(i).substring(1); //removes $ symbol
+                String nextIndex = resultStringList.get(i + 1).substring(1); //removes $ symbol
+
+                if (Double.parseDouble(currentIndex) > Double.parseDouble(nextIndex)) {
+                    resultStringList.set(i, "$" + nextIndex);
+                    resultStringList.set(i + 1, "$" + currentIndex);
                 }
             }
             stopAtOneFewerEachLoop--;
