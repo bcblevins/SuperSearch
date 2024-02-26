@@ -61,7 +61,10 @@ public class MyRegex {
                 .replace("digit", "\\d")
                 .replace("letter", "[a-zA-Z]")
                 .replace("alphaNum", "[a-zA-Z0-9]")
-                .replace("space", " ");
+                .replace("space", " ")
+                .replace("$", "\\$")
+                .replace("?", "\\?")
+                .replace("+", "\\+");
 
         return userRegex;
     }
