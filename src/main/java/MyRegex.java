@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
     [] = defines a character set. ex [\\da-z] will match any number or lowercase letter
      */
 public class MyRegex {
+    private static final String ESCAPED_CHARACTERS = "\\.[]{}()<>*+-=!?^$|";
 
     //For phone numbers
     public static String phoneRegex = "" +
@@ -56,16 +57,24 @@ public class MyRegex {
                 alphaNum = any number 0-9, any letter a-z, case insensitive
                 space = empty space
                 """);
-        String userRawPattern = IOSystem.promptForInput("").replace(" ", "");
-        String userRegex = userRawPattern
-                .replace("digit", "\\d")
-                .replace("letter", "[a-zA-Z]")
-                .replace("alphaNum", "[a-zA-Z0-9]")
-                .replace("space", " ")
-                .replace("$", "\\$")
-                .replace("?", "\\?")
-                .replace("+", "\\+");
+        String[] userRawPattern = IOSystem.promptForInput("").split(" ");
+        StringBuilder userRegex = new StringBuilder();
+        for (String character : userRawPattern) {
+            if (character.equals("digit")) {
+                character = "\\d";
+            } else if (character.equalsIgnoreCase("letter")) {
+                character = "[a-zA-Z]";
+            } else if (character.equalsIgnoreCase("alphaNum")) {
+                character = "[a-zA-Z0-9]";
+            } else if (character.equalsIgnoreCase("space")) {
+                character = " ";
+            } else if (ESCAPED_CHARACTERS.contains(character)) {
+                character = "\\" + character;
+            }
+            userRegex.append(character);
+        }
 
-        return userRegex;
+
+        return userRegex.toString();
     }
 }

@@ -1,7 +1,7 @@
 import java.io.File;
 
 public class Main {
-    public static File sourceFile;
+    public static String sourceFilePath = "";
     public static File targetFile;
     public static SimpleSearch simpleSearch = new SimpleSearch();
     public static RegexSearch regexSearch = new RegexSearch();
@@ -13,8 +13,7 @@ public class Main {
         // input file or clipboard?
         String menuChoice = IOSystem.createMenu("search text from", "File", "Clipboard");
         if (menuChoice.equals("1")) {
-            String sourceFilePath = IOSystem.promptForInput("Please enter source file path:");
-            sourceFile = new File(sourceFilePath);
+            sourceFilePath = IOSystem.promptForInput("Please enter source file path:");
             isSearchingFromFile = true;
         }
 
@@ -22,34 +21,49 @@ public class Main {
         targetFile = new File(targetFilePath);
 
         // search for phone numbers, emails, or prices?
-        menuChoice = IOSystem.createMenu("search for", "All phone numbers", "All email addresses", "All prices", "Specific text and return line numbers", "Create your own search pattern");
+        menuChoice = IOSystem.createMenu("search for", "Specific text and return line numbers", "All phone numbers", "All email addresses", "All prices", "Create your own search pattern");
 
         if (menuChoice.equals("1")) {
-            if (!isSearchingFromFile) {
-                IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.phoneRegex));
-            }
-
-        } else if (menuChoice.equals("2")) {
-            if (!isSearchingFromFile) {
-                IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.emailRegex));
-            }
-
-        } else if (menuChoice.equals("3")) {
-            if (!isSearchingFromFile) {
-                IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.priceRegex));
-            }
-
-        } else if (menuChoice.equals("4")) {
             String searchTerm = IOSystem.promptForInput("Please enter the word you would like to search for");
             if (!isSearchingFromFile) {
                 IOSystem.toScreenAndFile(targetFile, simpleSearch.searchFromClipboard(searchTerm));
+            } else {
+                IOSystem.toScreenAndFile(targetFile, simpleSearch.searchFromFile(sourceFilePath, MyRegex.phoneRegex));
             }
-        } else if (menuChoice.equals("5")) {
-            if (!isSearchingFromFile) {
-                IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.regexBuilder()));
+        } else {
+            String sortChoice = IOSystem.promptForInput("Would you like to sort your results? (y/n)");
+            regexSearch.setSorted(sortChoice.equalsIgnoreCase("y"));
+        }
 
+        switch (menuChoice) {
+            case "2" -> {
+                if (!isSearchingFromFile) {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.phoneRegex));
+                } else {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.phoneRegex));
+                }
+            }
+            case "3" -> {
+                if (!isSearchingFromFile) {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.emailRegex));
+                } else {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.emailRegex));
+                }
+            }
+            case "4" -> {
+                if (!isSearchingFromFile) {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.priceRegex));
+                } else {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.priceRegex));
+                }
+            }
+            case "5" -> {
+                if (!isSearchingFromFile) {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.regexBuilder()));
+                } else {
+                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.regexBuilder()));
+                }
             }
         }
-        // do the thing
     }
 }
