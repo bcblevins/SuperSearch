@@ -7,10 +7,9 @@ public class Main {
     public static RegexSearch regexSearch = new RegexSearch();
     public static boolean isSearchingFromFile = false;
     public static void main(String[] args) {
-        String searchType = "";
         System.out.println("Welcome to Extractor.");
 
-        // input file or clipboard?
+        //input file or clipboard?
         String menuChoice = IOSystem.createMenu("search text from", "File", "Clipboard");
         if (menuChoice.equals("1")) {
             sourceFilePath = IOSystem.promptForInput("Please enter source file path:");
@@ -20,9 +19,10 @@ public class Main {
         String targetFilePath = IOSystem.promptForInput("Please enter desired target file path:");
         targetFile = new File(targetFilePath);
 
-        // search for phone numbers, emails, or prices?
+        //search type
         menuChoice = IOSystem.createMenu("search for", "Specific text and return line numbers", "All phone numbers", "All email addresses", "All prices", "Create your own search pattern");
 
+        //simple search
         if (menuChoice.equals("1")) {
             String searchTerm = IOSystem.promptForInput("Please enter the word you would like to search for");
             if (!isSearchingFromFile) {
@@ -35,6 +35,7 @@ public class Main {
             regexSearch.setSorted(sortChoice.equalsIgnoreCase("y"));
         }
 
+        //regex search options
         switch (menuChoice) {
             case "2" -> {
                 if (!isSearchingFromFile) {

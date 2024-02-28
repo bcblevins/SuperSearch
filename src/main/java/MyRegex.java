@@ -46,11 +46,12 @@ public class MyRegex {
     public static String regexBuilder() {
         System.out.println("""
                 A pattern is made of a combination of special characters and/or normal characters.
-                "For example, "# digit digit space letter" would match a 5 character string: 
-                A "#" sign followed by any 2 numbers, a space, and then any letter. ex: "#42 A", "#09 f" """);
+                "For example, "# digit digit space letter" would match a 5 character string:
+                A "#" sign followed by any 2 numbers, a space, and then any letter. ex: "#42 A", "#09 f"
+                """);
         System.out.println("---------------------------------------------------------------------------------------------------");
         System.out.println("""
-                Using the follow key, enter a pattern separated by spaces you would like to search for:
+                Using the following key, enter a pattern separated by spaces you would like to search for:
                 
                 digit = any number 0-9
                 letter = any letter a-z, case insensitive

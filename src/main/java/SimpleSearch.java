@@ -24,6 +24,7 @@ public class SimpleSearch extends Search{
 
         return resultString.toString();
     }
+
     public String searchFromClipboard(String searchTerm){
         StringBuilder result = new StringBuilder();
         String[] clipboardLines = IOSystem.getTextFromClipboard().split("\n");
