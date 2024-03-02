@@ -1,6 +1,7 @@
 import java.io.File;
 
 public class Main {
+    //TODO: implement usage of .dat file
     public static String sourceFilePath = "";
     public static File targetFile;
     public static SimpleSearch simpleSearch = new SimpleSearch();
