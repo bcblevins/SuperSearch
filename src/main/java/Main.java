@@ -10,11 +10,18 @@ public class Main {
         System.out.println("Welcome to Extractor.");
 
         //input file or clipboard?
-        String menuChoice = IOSystem.createMenu("search text from", "File", "Clipboard");
+        String menuChoice = IOSystem.createMenu("search text from", "File", "Clipboard", "Test");
         if (menuChoice.equals("1")) {
             sourceFilePath = IOSystem.promptForInput("Please enter source file path:");
             isSearchingFromFile = true;
         }
+
+        ////////////////////////////
+        if (menuChoice.equals("3")) {
+            System.out.println(regexSearch.searchFromClipboard(MyRegex.addressRegex));
+            return;
+        }
+        ////////////////////////////
 
         String targetFilePath = IOSystem.promptForInput("Please enter desired target file path:");
         targetFile = new File(targetFilePath);

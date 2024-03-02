@@ -5,12 +5,36 @@
     //s = space " "
     ? = zero or one of the pattern before it.
     | = OR - will match if string has pattern before OR after pipe character
-    {#} = how many times something happens. "\\d{3}" means 3 digits or "\\d\\d\\d"
+    {} = how many times something happens. "\\d{3}" means 3 digits or "\\d\\d\\d"
     () = used for grouping
     [] = defines a character set. ex [\\da-z] will match any number or lowercase letter
      */
 public class MyRegex {
     private static final String ESCAPED_CHARACTERS = "\\.[]{}()<>*+-=!?^$|";
+
+    public static String regexBuilder(String userPattern) {
+        String[] userRawPattern = userPattern.split(" ");
+        StringBuilder userRegex = new StringBuilder();
+        for (String character : userRawPattern) {
+            if (character.equals("digit")) {
+                character = "\\d";
+            } else if (character.equalsIgnoreCase("letter")) {
+                character = "[a-zA-Z]";
+            } else if (character.equalsIgnoreCase("alphaNum")) {
+                character = "[a-zA-Z0-9]";
+            } else if (character.equalsIgnoreCase("space")) {
+                character = " ";
+            } else if (ESCAPED_CHARACTERS.contains(character)) {
+                character = "\\" + character;
+            }
+            userRegex.append(character);
+        }
+
+
+        return userRegex.toString();
+    }
+
+    //All regular expressions stored in my-regex.dat were created by me and explained here. Some simple ones or variants not explained.
 
     //For phone numbers
     public static String phoneRegex = "" +
@@ -41,26 +65,16 @@ public class MyRegex {
             ")+" +         //end group, can occur 1-infinite times
             "\\." +        //decimal
             "\\d{2}";      //2 digits (cents)
-
-    public static String regexBuilder(String userPattern) {
-        String[] userRawPattern = userPattern.split(" ");
-        StringBuilder userRegex = new StringBuilder();
-        for (String character : userRawPattern) {
-            if (character.equals("digit")) {
-                character = "\\d";
-            } else if (character.equalsIgnoreCase("letter")) {
-                character = "[a-zA-Z]";
-            } else if (character.equalsIgnoreCase("alphaNum")) {
-                character = "[a-zA-Z0-9]";
-            } else if (character.equalsIgnoreCase("space")) {
-                character = " ";
-            } else if (ESCAPED_CHARACTERS.contains(character)) {
-                character = "\\" + character;
-            }
-            userRegex.append(character);
-        }
-
-
-        return userRegex.toString();
-    }
+    public static String addressRegex = "" +
+            "\\d{1,15}\\s" +                 //address number
+            "([a-zA-Z]+\\.?\\s?){1,4},\\s" +  //street name, accounts for multiple words and things like "st.", "ct.", etc.
+            "([a-zA-Z]+\\s?){1,4},\\s" +     //city name, accounts for multiple words
+            "([a-zA-Z]+\\s?){1,4}\\s" +      //State name, accounts for multiple words
+            "\\d{5}";                        //5 digit zip code
+    public static String nameRegex = "" +
+            "[A-Z]" +          //capital first letter of name
+            "[a-z]+" +         //remaining letters of first name lowercase
+            "\\s" +            //space
+            "[A-Z][a-z]+" +    //last name, same format as first
+            "(-[A-Z][a-z]+)?"; //optional hyphenated last name addition
 }
