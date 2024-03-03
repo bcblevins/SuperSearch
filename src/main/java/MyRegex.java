@@ -17,14 +17,17 @@ import java.util.Scanner;
      */
 public class MyRegex {
     private static final String ESCAPED_CHARACTERS = "\\.[]{}()<>*+-=!?^$|";
-    public static List<RegexPattern> createRegexPatterns(){
+    public static Map<String, Map<String, Map<String, String>>> createRegexPatternMapception(){
+        //create master pattern list
         List<RegexPattern> regexPatternList = new ArrayList<>();
-        File myRegex = new File("/main/resources/my-regex.dat");
+        File myRegex = new File("./src/main/resources/my-regex.dat");
 
         try (Scanner dataInput = new Scanner(myRegex)) {
             while (dataInput.hasNextLine()) {
                 String[] currentLineArray = dataInput.nextLine().split("\\|");
-                regexPatternList.add(new RegexPattern(currentLineArray[0], currentLineArray[1], currentLineArray[2], currentLineArray[3]))
+                if (currentLineArray.length >= 4) {
+                    regexPatternList.add(new RegexPattern(currentLineArray[0], currentLineArray[1], currentLineArray[2], currentLineArray[3]));
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println("Regex file not found");

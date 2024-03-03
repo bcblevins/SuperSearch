@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.List;
 
 public class IOSystem {
     private static Scanner userInput = new Scanner(System.in);
@@ -20,6 +21,35 @@ public class IOSystem {
             choiceNumber = i + 1;
             options.add(String.valueOf(choiceNumber));
             System.out.println(choiceNumber + ". " + args[i]);
+        }
+
+        //Validate choice and re-prompt if necessary
+        String choice = userInput.nextLine();
+        while (true) {
+            if (options.contains(choice)) {
+                break;
+            } else {
+                System.out.println("That is not a valid option. Please select an option between 1 and " + choiceNumber);
+                choice = userInput.nextLine();
+            }
+        }
+        return choice;
+    }
+    public static String dataMenu(String menuTitle, List<String> choices) {
+        //Display options
+        System.out.println(menuTitle);
+        Set<String> options = new HashSet<>();
+        int choiceNumber = 0;
+        String currentChoice = null;
+        String previousChoice = null;
+        for (int i = 0 ; i < choices.size() ; i++) {
+            currentChoice = choices.get(i);
+            if (!currentChoice.equals(previousChoice)) {
+                choiceNumber++;
+                options.add(String.valueOf(choiceNumber));
+                System.out.println(currentChoice);
+                previousChoice = choices.get(i);
+            }
         }
 
         //Validate choice and re-prompt if necessary

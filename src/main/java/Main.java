@@ -1,7 +1,8 @@
 import java.io.File;
+import java.util.List;
 
 public class Main {
-    //TODO: implement usage of .dat file
+    //TODO: Create Mapception
     public static String sourceFilePath = "";
     public static File targetFile;
     public static SimpleSearch simpleSearch = new SimpleSearch();
@@ -19,7 +20,10 @@ public class Main {
 
         ////////////////////////////
         if (menuChoice.equals("3")) {
-            System.out.println(regexSearch.searchFromClipboard(MyRegex.nameRegex));
+            List<RegexPattern> regexPatternList = MyRegex.createRegexPatterns();
+            for (RegexPattern regexPattern : regexPatternList) {
+                System.out.println(regexPattern.getCategory());
+            }
             return;
         }
         ////////////////////////////
@@ -28,7 +32,7 @@ public class Main {
         targetFile = new File(targetFilePath);
 
         //search type
-        menuChoice = IOSystem.createMenu("search for", "Specific text and return line numbers", "All phone numbers", "All email addresses", "All prices", "Create your own search pattern");
+        menuChoice = IOSystem.createMenu("", "Plain text search", "Pattern based search");
 
         //simple search
         if (menuChoice.equals("1")) {
@@ -38,56 +42,46 @@ public class Main {
             } else {
                 IOSystem.toScreenAndFile(targetFile, simpleSearch.searchFromFile(sourceFilePath, MyRegex.phoneRegex));
             }
-        } else {
-            String sortChoice = IOSystem.promptForInput("Would you like to sort your results? (y/n)");
-            regexSearch.setSorted(sortChoice.equalsIgnoreCase("y"));
-        }
+        } else if (menuChoice.equals("2")) {
+            menuChoice = IOSystem.createMenu("", "Choose from a list of patterns", "Create your own pattern");
+            //regex search options
+            switch (menuChoice) {
+                case "1" -> {
+                    List<RegexPattern> regexPatterns = MyRegex.createRegexPatterns();
+                    System.out.println("Please select a category:");
+                    for (RegexPattern regexPattern : regexPatterns) {
 
-        //regex search options
-        switch (menuChoice) {
-            case "2" -> {
-                if (!isSearchingFromFile) {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.phoneRegex));
-                } else {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.phoneRegex));
+                    }
+                    if (!isSearchingFromFile) {
+                        IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.phoneRegex));
+                    } else {
+                        IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.phoneRegex));
+                    }
                 }
-            }
-            case "3" -> {
-                if (!isSearchingFromFile) {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.emailRegex));
-                } else {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.emailRegex));
+                case "2" -> {
+                    System.out.println("""
+                            A pattern is made of a combination of special characters and/or normal characters.
+                            For example, "# digit digit space letter" would match a 5 character string:
+                            A "#" sign followed by any 2 numbers, a space, and then any letter. ex: "#42 A", "#09 f"
+                            """);
+                    System.out.println("---------------------------------------------------------------------------------------------------");
+                    System.out.println("""
+                            Using the following key, enter a pattern separated by spaces you would like to search for:
+                                            
+                            digit = any number 0-9
+                            letter = any letter a-z, case insensitive
+                            alphaNum = any number 0-9, any letter a-z, case insensitive
+                            space = empty space
+                            """);
+                    String userPattern = IOSystem.promptForInput("");
+                    String userRegex = MyRegex.regexBuilder(userPattern);
+                    if (!isSearchingFromFile) {
+                        IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(userRegex));
+                    } else {
+                        IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, userRegex));
+                    }
                 }
-            }
-            case "4" -> {
-                if (!isSearchingFromFile) {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.priceRegex));
-                } else {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, MyRegex.priceRegex));
-                }
-            }
-            case "5" -> {
-                System.out.println("""
-                A pattern is made of a combination of special characters and/or normal characters.
-                "For example, "# digit digit space letter" would match a 5 character string:
-                A "#" sign followed by any 2 numbers, a space, and then any letter. ex: "#42 A", "#09 f"
-                """);
-                System.out.println("---------------------------------------------------------------------------------------------------");
-                System.out.println("""
-                Using the following key, enter a pattern separated by spaces you would like to search for:
-                
-                digit = any number 0-9
-                letter = any letter a-z, case insensitive
-                alphaNum = any number 0-9, any letter a-z, case insensitive
-                space = empty space
-                """);
-                String userPattern = IOSystem.promptForInput("");
-                String userRegex = MyRegex.regexBuilder(userPattern);
-                if (!isSearchingFromFile) {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(userRegex));
-                } else {
-                    IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromFile(sourceFilePath, userRegex));
-                }
+
             }
         }
     }
