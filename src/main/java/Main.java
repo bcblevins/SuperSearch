@@ -19,7 +19,7 @@ public class Main {
 
         ////////////////////////////
         if (menuChoice.equals("3")) {
-            System.out.println(regexSearch.searchFromClipboard(MyRegex.addressRegex));
+            System.out.println(regexSearch.searchFromClipboard(MyRegex.nameRegex));
             return;
         }
         ////////////////////////////

@@ -1,3 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /*
     General Regex characters:
@@ -11,6 +17,20 @@
      */
 public class MyRegex {
     private static final String ESCAPED_CHARACTERS = "\\.[]{}()<>*+-=!?^$|";
+    public static List<RegexPattern> createRegexPatterns(){
+        List<RegexPattern> regexPatternList = new ArrayList<>();
+        File myRegex = new File("/main/resources/my-regex.dat");
+
+        try (Scanner dataInput = new Scanner(myRegex)) {
+            while (dataInput.hasNextLine()) {
+                String[] currentLineArray = dataInput.nextLine().split("\\|");
+                regexPatternList.add(new RegexPattern(currentLineArray[0], currentLineArray[1], currentLineArray[2], currentLineArray[3]))
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Regex file not found");
+        }
+        return regexPatternList;
+    }
 
     public static String regexBuilder(String userPattern) {
         String[] userRawPattern = userPattern.split(" ");
