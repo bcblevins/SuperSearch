@@ -1,8 +1,9 @@
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
-    //TODO: Create Mapception
+    //TODO: Create Map-ception
     public static String sourceFilePath = "";
     public static File targetFile;
     public static SimpleSearch simpleSearch = new SimpleSearch();
@@ -20,9 +21,13 @@ public class Main {
 
         ////////////////////////////
         if (menuChoice.equals("3")) {
-            List<RegexPattern> regexPatternList = MyRegex.createRegexPatterns();
-            for (RegexPattern regexPattern : regexPatternList) {
-                System.out.println(regexPattern.getCategory());
+            Map<String, Map<String, Map<String, String>>> regexMap = MyRegex.createRegexPatternMap();
+            for (Map.Entry<String, Map<String, Map<String, String>>> category : regexMap.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> subcategory : category.getValue().entrySet()) {
+                    for (Map.Entry<String, String> pattern : subcategory.getValue().entrySet()) {
+                        System.out.println(pattern.getKey());
+                    }
+                }
             }
             return;
         }
@@ -47,11 +52,8 @@ public class Main {
             //regex search options
             switch (menuChoice) {
                 case "1" -> {
-                    List<RegexPattern> regexPatterns = MyRegex.createRegexPatterns();
-                    System.out.println("Please select a category:");
-                    for (RegexPattern regexPattern : regexPatterns) {
+                    //TODO: add regexMap call
 
-                    }
                     if (!isSearchingFromFile) {
                         IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(MyRegex.phoneRegex));
                     } else {
