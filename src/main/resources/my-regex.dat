@@ -9,12 +9,12 @@ Contact|Name|First Middle Last|[A-Z][a-z]+\s[A-Z][a-z]+\s[A-Z][a-z]+(-[A-Z][a-z]
 Contact|Name|Last, First|[A-Z][a-z]+(-[A-Z][a-z]+)?,\s[A-Z][a-z]+
 Retail|Price|dollars and cents|\$(\d{1,3},?)+\.\d{2}
 Retail|Price|just dollars|\$(\d{1,3},?)+
-Retail|UPC|bar code (warning: will match any 12 digit number)|\d{12}
+Retail|UPC|bar code (warning: will match any 12 digit number)|\b\d{12}\b
 Bank|ACH|routing number|\d{9}
 Bank|ACH|account number|\d{8,17}
-Measurement|Imperial|feet and inches (123'123")|\d+'\d"
-Measurement|Imperial|feet only (123')|\d+'
-Measurement|Imperial|inches only (123")|\d+"
+Measurement|Imperial|feet and inches (123'123")|\b\d+'\d"
+Measurement|Imperial|feet only (123')|\b\d+'
+Measurement|Imperial|inches only (123")|\b\d+"
 Measurement|Metric|kilometers no decimal|\d+\skm
 Measurement|Metric|kilometers optional decimal|\d+(\.\d\d)?\skm
 Measurement|Metric|meters no decimal|\d+\sm
