@@ -8,12 +8,14 @@ import java.util.List;
 
 public class IOSystem {
     private static Scanner userInput = new Scanner(System.in);
+    private static final String SEPARATOR = "------------------------------------------------------------------";
 
     //----------------------
     // Major Methods
     //----------------------
     public static String createMenu(String commonWord, String... args) {
         //Display options
+        System.out.println(SEPARATOR);
         System.out.println("Would you like to " + commonWord + ":");
         Set<String> options = new HashSet<>();
         int choiceNumber = 0;
@@ -35,40 +37,12 @@ public class IOSystem {
         }
         return choice;
     }
-    public static String dataMenu(String menuTitle, List<String> choices) {
-        //Display options
-        System.out.println(menuTitle);
-        Set<String> options = new HashSet<>();
-        int choiceNumber = 0;
-        String currentChoice = null;
-        String previousChoice = null;
-        for (int i = 0 ; i < choices.size() ; i++) {
-            currentChoice = choices.get(i);
-            if (!currentChoice.equals(previousChoice)) {
-                choiceNumber++;
-                options.add(String.valueOf(choiceNumber));
-                System.out.println(currentChoice);
-                previousChoice = choices.get(i);
-            }
-        }
 
-        //Validate choice and re-prompt if necessary
-        String choice = userInput.nextLine();
-        while (true) {
-            if (options.contains(choice)) {
-                break;
-            } else {
-                System.out.println("That is not a valid option. Please select an option between 1 and " + choiceNumber);
-                choice = userInput.nextLine();
-            }
-        }
-
-        return choice;
-    }
     //----------------------
     // Small Methods
     //----------------------
     public static String promptForInput(String prompt) {
+        System.out.println();
         System.out.println(prompt);
         return userInput.nextLine();
     }
@@ -86,11 +60,15 @@ public class IOSystem {
     }
 
     public static void toScreenAndFile(File targetFile, String resultString) {
+        System.out.println(SEPARATOR);
         try (PrintWriter dataOutput = new PrintWriter(targetFile)) {
             dataOutput.print(resultString);
         } catch (FileNotFoundException e) {
             System.out.println("There was an error writing to the output file. Please check filepath and try again.");
         }
         System.out.println(resultString);
+    }
+    public static void printSeparator(){
+        System.out.println(SEPARATOR);
     }
 }
