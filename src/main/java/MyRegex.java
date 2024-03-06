@@ -162,7 +162,7 @@ public class MyRegex {
 //
 //    General Regex characters:
 //    //d = digit "1234567890"
-//    //s = space " "
+//    //s = white space, can be space, tab, or newline
 //    ? = zero or one of the pattern before it.
 //    | = OR - will match if string has pattern before OR after pipe character
 //    {} = how many times something happens. "\\d{3}" means 3 digits or "\\d\\d\\d"
