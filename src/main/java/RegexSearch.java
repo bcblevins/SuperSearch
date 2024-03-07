@@ -24,11 +24,11 @@ public class RegexSearch extends Search{
                 String currentLine = userInput.nextLine();
                 fileString.append(currentLine).append("\n");
             }
-            Pattern searchPattern = Pattern.compile(searchTerm);
-            Matcher matcher = searchPattern.matcher(fileString);
+            Pattern searchPattern = Pattern.compile(searchTerm); //the .compile() method takes a string and returns a regex pattern that can be used for searching
+            Matcher matcher = searchPattern.matcher(fileString); //the .matcher() method takes a string and returns a match object, this contains information about any matches found by regex pattern
 
-            while (matcher.find()) {
-                resultStringList.add(matcher.group() + "\n");
+            while (matcher.find()) { //.find() will start from the beginning of the source and find the first match of the given pattern. Each subsequent call to this method will start where the last match left off. returns true if a match is found.
+                resultStringList.add(matcher.group() + "\n"); //.group() will return a string containing the last match found by .find()
             }
 
         } catch (FileNotFoundException e) {

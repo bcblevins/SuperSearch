@@ -2,6 +2,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
 public class MyRegexTest {
     /*
     --no specials or escapes
@@ -11,6 +15,9 @@ public class MyRegexTest {
     space
     escapes
      */
+    //--------------------
+    // regexBuilder Tests
+    //--------------------
     @Test
     public void regexBuilder_should_return_input_string_if_no_specials_or_escapes(){
         Assert.assertEquals("regexBuilder should return the same string back without spaces if no escape or special characters used",
@@ -51,5 +58,54 @@ public class MyRegexTest {
         Assert.assertEquals("regexBuilder should ass \\ to regex characters",
                 "\\\\\\.\\[\\]\\{\\}\\(\\)\\<\\>\\*\\+\\-\\=\\!\\?\\^\\$\\|", MyRegex.translateUserPattern("\\ . [ ] { } ( ) < > * + - = ! ? ^ $ |"));
     }
+    //--------------------------------
+    // createRegexPatternMap tests
+    //--------------------------------
+    /*
+        - top level map contains all categories
+        - category maps contain all subcategories
+        - subcategory maps contain all patterns
+    */
+    private Map<String, Map<String, Map<String, String>>> mainRegexMap;
+    private List<String> categoriesInFile;
+
+    @Before
+    public void create_regex_Map_for_testing(){
+        mainRegexMap = MyRegex.createRegexPatternMap();
+        // read regex file and add categories to list
+        categoriesInFile = new ArrayList<>();
+        File myRegex = new File("./src/main/resources/my-regex.dat");
+        try (Scanner dataInput = new Scanner(myRegex)) {
+            while (dataInput.hasNextLine()) {
+                String currentLine = dataInput.nextLine();
+                if (!currentLine.isEmpty()) {
+                    String[] currentLineArray = currentLine.split("\\|");
+                    String category = currentLineArray[0];
+                    if (!categoriesInFile.contains(category)) {
+                        categoriesInFile.add(category);
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("my-regex.dat file not found");
+        }
+
+
+    }
+
+    @Test
+    public void main_regex_map_should_contain_all_categories() {
+        for (String category : categoriesInFile) {
+            Assert.assertTrue("mainRegexMap should contain all categories in my-regex.dat", mainRegexMap.containsKey(category));
+        }
+    }
+
+    @Test
+    public void regexMap_should_not_contain_extra_category_keys() {
+        Assert.assertEquals("mainRegexMap should not contain extra keys", categoriesInFile.size(), mainRegexMap.size());
+    }
+
+    // I really tried to think of ways to test the nested maps but I had a lot of trouble and needed to move on :(
 
 }

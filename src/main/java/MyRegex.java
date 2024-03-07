@@ -24,31 +24,40 @@ public class MyRegex {
         the major categories of the regex patterns. The values are Maps, which contain keys representing the
         subcategories. The values of this map are maps, which contain keys that match each regex pattern's name, and
         the values are the actual regex patterns. Represented more clearly (hopefully):
-        Master Map<Category, Category Map>
-        Category Map<Subcategory, Subcategory Map>
-        Subcategory Map<Name, Pattern>
+        Main Map<Category name, Category Map>
+        Category Map<Subcategory name, Subcategory Map>
+        Subcategory Map<Pattern name, Pattern>
 
         To actually create and fill these maps, we need to start with the master Map that will exist outside the
-        RegexPattern loop. It is easiest to understand if we work from inside->out (unfortunately I don't think it can
-        be coded this way).
+        RegexPattern loop, but it is easiest to understand if we explain it working from inside->out.
 
         We have a name and pattern. This needs to be added to its subcategory map if it exists, and if not, we need to
-        create one for it. This map then needs to be added to a category map if it exists, and if not, we need to create
-        one for it. This then needs to be added to the master map.
+        create one for it. We do this for each pattern until we have a collection of maps containing each pattern and
+        its name. For each of these maps, we need to add them to a category map as a value, their name as the key, and
+        if its category map doesn't exist, we need to create one. Now we have a collection of category maps, which need
+        to be added to the main map as values, their names as keys.
 
-        For coding, we have to work backwards. First we get the RegexPattern category and add it to the master map if it
-        doesn't exist yet. Then we create a variable for this category map, so we can add things to it. Then we get the
-        subcategory and add it to the category map if it doesn't exist yet. We create a variable for this map so we can
-        add things to it. Then we add the RegexPattern's name and pattern to the subcategory map. Once we are done, we
-        should have a map of maps of maps!
+        For coding, we have to work outside in, because the only map we know for sure exists is the one that contains
+        all the other maps.
+
+         - First we get the RegexPattern category name and add it to the master map as a key with an empty but initialized
+         map as the value if it doesn't exist yet.
+         - Then we create a variable for this category map, because now it exists even if it is empty, so we can add
+         things to it.
+         - Then we get the subcategory name from the RegexPattern and add it as a key to the category map variable we
+         created if the subcategory doesn't exist yet, with an empty but initialized map as the value.
+         - Then we create a variable for this subcategory map so we can add things to it.
+         - Then we add the RegexPattern's name and pattern to the subcategory map.
+
+         Once we are done, we should have a map of maps of maps!
          */
 
         //create and fill map of maps of maps
-        Map<String, Map<String, Map<String, String>>> masterRegexMap = new HashMap<>();
+        Map<String, Map<String, Map<String, String>>> mainRegexMap = new HashMap<>();
         for (RegexPattern regexPattern : regexPatternList) {
             //Add the category map if it doesn't already exist, then create variable for adding things
-            masterRegexMap.putIfAbsent(regexPattern.getCategory(), new HashMap<>());
-            Map<String, Map<String, String>> categoryMap = masterRegexMap.get(regexPattern.getCategory());
+            mainRegexMap.putIfAbsent(regexPattern.getCategory(), new HashMap<>());
+            Map<String, Map<String, String>> categoryMap = mainRegexMap.get(regexPattern.getCategory());
 
             //Add subcategory map if it doesn't already exist, then create variable for adding things
             categoryMap.putIfAbsent(regexPattern.getSubcategory(), new HashMap<>());
@@ -58,47 +67,8 @@ public class MyRegex {
             subcategoryMap.put(regexPattern.getName(), regexPattern.getPattern());
         }
 
-        return masterRegexMap;
+        return mainRegexMap;
     }
-
-    public static String regexBuilder() {
-        System.out.println("""
-                            A pattern is made of a combination of special characters and/or normal characters.
-                            For example, "# digit digit space letter" would match a 5 character string:
-                            A "#" sign followed by any 2 numbers, a space, and then any letter. ex: "#42 A", "#09 f"
-                            """);
-        System.out.println("---------------------------------------------------------------------------------------------------");
-        System.out.println("""
-                            Using the following key, enter a pattern separated by spaces you would like to search for:
-                                            
-                            digit = any number 0-9
-                            letter = any letter a-z, case insensitive
-                            alphaNum = any number 0-9, any letter a-z, case insensitive
-                            space = empty space
-                            """);
-        String userPattern = IOSystem.promptForInput("");
-        return translateUserPattern(userPattern);
-    }
-    public static String translateUserPattern(String userPattern) {
-        String[] userRawPattern = userPattern.split(" ");
-        StringBuilder userRegex = new StringBuilder();
-        for (String character : userRawPattern) {
-            if (character.equals("digit")) {
-                character = "\\d";
-            } else if (character.equalsIgnoreCase("letter")) {
-                character = "[a-zA-Z]";
-            } else if (character.equalsIgnoreCase("alphaNum")) {
-                character = "[a-zA-Z0-9]";
-            } else if (character.equalsIgnoreCase("space")) {
-                character = " ";
-            } else if (ESCAPED_CHARACTERS.contains(character)) {
-                character = "\\" + character;
-            }
-            userRegex.append(character);
-        }
-        return userRegex.toString();
-    }
-
     public static String selectPattern(){
 
         Map<String, Map<String, Map<String, String>>> regexPatternMap = MyRegex.createRegexPatternMap();
@@ -156,6 +126,45 @@ public class MyRegex {
         }
         return regexPattern;
     }
+
+    public static String getUserPattern() {
+        System.out.println("""
+                            A pattern is made of a combination of special characters and/or normal characters.
+                            For example, "# digit digit space letter" would match a 5 character string:
+                            A "#" sign followed by any 2 numbers, a space, and then any letter. ex: "#42 A", "#09 f"
+                            """);
+        System.out.println("---------------------------------------------------------------------------------------------------");
+        System.out.println("""
+                            Using the following key, enter a pattern separated by spaces you would like to search for:
+                                            
+                            digit = any number 0-9
+                            letter = any letter a-z, case insensitive
+                            alphaNum = any number 0-9, any letter a-z, case insensitive
+                            space = empty space
+                            """);
+        String userPattern = IOSystem.promptForInput("");
+        return translateUserPattern(userPattern);
+    }
+    public static String translateUserPattern(String userPattern) {
+        String[] userRawPattern = userPattern.split(" ");
+        StringBuilder userRegex = new StringBuilder();
+        for (String character : userRawPattern) {
+            if (character.equals("digit")) {
+                character = "\\d";
+            } else if (character.equalsIgnoreCase("letter")) {
+                character = "[a-zA-Z]";
+            } else if (character.equalsIgnoreCase("alphaNum")) {
+                character = "[a-zA-Z0-9]";
+            } else if (character.equalsIgnoreCase("space")) {
+                character = " ";
+            } else if (ESCAPED_CHARACTERS.contains(character)) {
+                character = "\\" + character;
+            }
+            userRegex.append(character);
+        }
+        return userRegex.toString();
+    }
+
 
     //All regular expressions stored in my-regex.dat were created by me and explained here. Some simple ones or variants not explained.
 

@@ -1,15 +1,13 @@
 import java.io.File;
-import java.util.Map;
 
 public class Main {
-    //TODO: create unit tests, fix name regex and check the rest
     public static String sourceFilePath = "";
     public static File targetFile;
     public static SimpleSearch simpleSearch = new SimpleSearch();
     public static RegexSearch regexSearch = new RegexSearch();
     public static boolean isSearchingFromFile = false;
     public static void main(String[] args) {
-        System.out.println("Welcome to Extractor.");
+        System.out.println("Welcome to SuperSearch.");
 
         //input file or clipboard?
         String menuChoice = IOSystem.createMenu("search text from", "File", "Clipboard", "Test");
@@ -53,7 +51,7 @@ public class Main {
                     }
                 }
                 case "2" -> {
-                    String userRegex = MyRegex.regexBuilder();
+                    String userRegex = MyRegex.getUserPattern();
                     if (!isSearchingFromFile) {
                         IOSystem.toScreenAndFile(targetFile, regexSearch.searchFromClipboard(userRegex));
                     } else {
