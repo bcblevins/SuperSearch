@@ -6,6 +6,8 @@ public class Main {
     public static SimpleSearch simpleSearch = new SimpleSearch();
     public static RegexSearch regexSearch = new RegexSearch();
     public static boolean isSearchingFromFile = false;
+
+    // Main method
     public static void main(String[] args) {
         IOSystem.printSeparator();
         System.out.println("Welcome to SuperSearch.");
