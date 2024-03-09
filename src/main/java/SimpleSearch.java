@@ -19,20 +19,29 @@ public class SimpleSearch extends Search{
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
+            System.out.println("Source file not found.");
         }
 
         return resultString.toString();
     }
 
     public String searchFromClipboard(String searchTerm){
+        String caseSensitive = IOSystem.createMenu("search", "Case sensitive", "Case insensitive");
+
         StringBuilder result = new StringBuilder();
         String[] clipboardLines = IOSystem.getTextFromClipboard().split("\n");
 
         for (int i = 0; i < clipboardLines.length; i++) {
             String currentLine = clipboardLines[i];
-            if (currentLine.toLowerCase().contains(searchTerm.toLowerCase())) {
-                result.append((i + 1)).append(". ").append(clipboardLines[i]).append("\n");
+
+            if (caseSensitive.equals("1")) {
+                if (currentLine.contains(searchTerm)) {
+                    result.append((i + 1)).append(". ").append(clipboardLines[i]).append("\n");
+                }
+            } else {
+                if (currentLine.toLowerCase().contains(searchTerm.toLowerCase())) {
+                    result.append((i + 1)).append(". ").append(clipboardLines[i]).append("\n");
+                }
             }
         }
 

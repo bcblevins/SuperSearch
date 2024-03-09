@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexSearch extends Search{
+    //TODO: Support for sorting has been removed for the time being.
 //    private boolean isSorted = false;
 
 //    public void setSorted(boolean sorted) {
@@ -17,7 +18,7 @@ public class RegexSearch extends Search{
         File fileToSearch = new File(filePath);
         StringBuilder fileString = new StringBuilder();
         List<String> resultStringList = new ArrayList<>();
-        String resultString = "";
+        String resultString;
 
         try (Scanner userInput = new Scanner(fileToSearch)) {
             while (userInput.hasNextLine()) {
@@ -32,7 +33,7 @@ public class RegexSearch extends Search{
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
+            System.out.println("Source file not found.");
         }
 
         resultString = String.join("", resultStringList);
@@ -43,7 +44,7 @@ public class RegexSearch extends Search{
         List<String> resultStringList = new ArrayList<>();
         Pattern searchPattern = Pattern.compile(searchTerm);
         Matcher matcher = searchPattern.matcher(IOSystem.getTextFromClipboard());
-        String resultString = "";
+        String resultString;
 
         while (matcher.find()) {
             resultStringList.add(matcher.group() + "\n");
@@ -52,6 +53,7 @@ public class RegexSearch extends Search{
         resultString = String.join("", resultStringList);
         return resultString;
     }
+
 
     //-----------------
     // Helper Methods
@@ -90,7 +92,7 @@ public class RegexSearch extends Search{
 //            stopAtOneFewerEachLoop--;
 //        }
 //        return resultStringList;
-//    }
+//
 
 
 

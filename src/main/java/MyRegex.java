@@ -46,13 +46,13 @@ public class MyRegex {
          things to it.
          - Then we get the subcategory name from the RegexPattern and add it as a key to the category map variable we
          created if the subcategory doesn't exist yet, with an empty but initialized map as the value.
-         - Then we create a variable for this subcategory map so we can add things to it.
+         - Then we create a variable for this subcategory map, so we can add things to it.
          - Then we add the RegexPattern's name and pattern to the subcategory map.
 
          Once we are done, we should have a map of maps of maps!
          */
 
-        //create and fill map of maps of maps
+        //create and fill map
         Map<String, Map<String, Map<String, String>>> mainRegexMap = new HashMap<>();
         for (RegexPattern regexPattern : regexPatternList) {
             //Add the category map if it doesn't already exist, then create variable for adding things
@@ -128,6 +128,7 @@ public class MyRegex {
     }
 
     public static String getUserPattern() {
+        System.out.println("---------------------------------------------------------------------------------------------------");
         System.out.println("""
                             A pattern is made of a combination of special characters and/or normal characters.
                             For example, "# digit digit space letter" would match a 5 character string:
@@ -166,7 +167,7 @@ public class MyRegex {
     }
 
 
-    //All regular expressions stored in my-regex.dat were created by me and explained here. Some simple ones or variants not explained.
+    //All regular expressions stored in my-regex.dat were created by me and some explained here. Some simple ones or variants not explained.
 
 //
 //    General Regex characters:
@@ -182,7 +183,7 @@ public class MyRegex {
     //For phone numbers
 //    public static String phoneRegex = "" +
 //            "(" +                //begin area code group
-//            "\\(\\d{3}\\)\\s" +  //first area code pattern ex. "(123) "
+//            "\\(\\d{3}\\)\ " +  //first area code pattern ex. "(123) "
 //            "|" +                //OR
 //            "\\d{3}-" +          //second area code pattern ex "123-"
 //            ")?" +               //end area code group, make whole group optional
@@ -208,16 +209,18 @@ public class MyRegex {
 //            ")+" +         //end group, can occur 1-infinite times
 //            "\\." +        //decimal
 //            "\\d{2}";      //2 digits (cents)
+//    //For addresses
 //    public static String addressRegex = "" +
 //            "\\d{1,15}\\s" +                 //address number
 //            "([a-zA-Z]+\\.?\\s?){1,4},\\s" +  //street name, accounts for multiple words and things like "st.", "ct.", etc.
 //            "([a-zA-Z]+\\s?){1,4},\\s" +     //city name, accounts for multiple words
 //            "([a-zA-Z]+\\s?){1,4}\\s" +      //State name, accounts for multiple words
-//            "\\d{5}";                        //5 digit zip code
+//            "\\d{5}";                        //5-digit zip code
+//    //For names
 //    public static String nameRegex = "" +
 //            "[A-Z]" +          //capital first letter of name
 //            "[a-z]+" +         //remaining letters of first name lowercase
-//            "\\s" +            //space
+//            " " +            //space
 //            "[A-Z][a-z]+" +    //last name, same format as first
 //            "(-[A-Z][a-z]+)?"; //optional hyphenated last name addition
 }

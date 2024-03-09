@@ -4,18 +4,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.List;
 
 public class IOSystem {
-    private static Scanner userInput = new Scanner(System.in);
-    private static final String SEPARATOR = "------------------------------------------------------------------";
+    private static final Scanner USER_INPUT = new Scanner(System.in);
 
     //----------------------
     // Major Methods
     //----------------------
     public static String createMenu(String commonWord, String... args) {
         //Display options
-        System.out.println(SEPARATOR);
+        printSeparator();
         System.out.println("Would you like to " + commonWord + ":");
         Set<String> options = new HashSet<>();
         int choiceNumber = 0;
@@ -26,13 +24,13 @@ public class IOSystem {
         }
 
         //Validate choice and re-prompt if necessary
-        String choice = userInput.nextLine();
+        String choice = USER_INPUT.nextLine();
         while (true) {
             if (options.contains(choice)) {
                 break;
             } else {
                 System.out.println("That is not a valid option. Please select an option between 1 and " + choiceNumber);
-                choice = userInput.nextLine();
+                choice = USER_INPUT.nextLine();
             }
         }
         return choice;
@@ -42,9 +40,9 @@ public class IOSystem {
     // Small Methods
     //----------------------
     public static String promptForInput(String prompt) {
-        System.out.println();
+        printSeparator();
         System.out.println(prompt);
-        return userInput.nextLine();
+        return USER_INPUT.nextLine();
     }
 
     public static String getTextFromClipboard() {
@@ -60,7 +58,7 @@ public class IOSystem {
     }
 
     public static void toScreenAndFile(File targetFile, String resultString) {
-        System.out.println(SEPARATOR);
+        printSeparator();
         try (PrintWriter dataOutput = new PrintWriter(targetFile)) {
             dataOutput.print(resultString);
         } catch (FileNotFoundException e) {
@@ -69,6 +67,6 @@ public class IOSystem {
         System.out.println(resultString);
     }
     public static void printSeparator(){
-        System.out.println(SEPARATOR);
+        System.out.println("------------------------------------------------------------------");
     }
 }
